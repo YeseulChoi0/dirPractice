@@ -3,9 +3,26 @@
 #include <dirent.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <string.h>
+#include <errno.h>
 
-int main(){
-  DIR * dir = opendir("./");
+int main(int argc, char *argv[]){
+  char directory [1000];
+  //printf("At least this :( \n");
+  if (argc == 1){
+    fgets(directory, 1000, stdin);
+    directory[strlen(directory) - 1] = '\0';
+  }else{
+    strcpy(directory, argv[1]);
+  }
+  //printf("directory: 1%s1\n", directory);
+
+  //printf("j\n");
+  DIR * dir = opendir(directory);
+  if (errno > 0){
+    printf("%s\n", strerror(errno));
+    exit(0);
+  }
   int type = 0;
   struct dirent * nextFile = readdir(dir);
   struct stat file;
